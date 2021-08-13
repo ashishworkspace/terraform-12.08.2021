@@ -30,6 +30,7 @@ resource "aws_vpc" "vpc-variable"{
     
 }
 
+variable "public_key_location" {}
 resource "aws_subnet" "subnet-variable-0" {
     vpc_id = aws_vpc.vpc-variable.id
     cidr_block = var.cidr_block_range_subnets[0].cidr_block
@@ -125,4 +126,41 @@ ingress  {
  tags = {
    "Name" = "sg-terraform"
  }
+}
+
+# fetching the ami information 
+
+data "aws_ami" "getting-ami-id" {
+  most_recent = true
+  owners = ["amazon"]
+  filter  {
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+# output "get_ami-id" {
+#   value = data.aws_ami.getting-ami-id.id
+# }
+
+#ssh-key
+
+resource "aws_key_pair" "public-key" {
+  key_name = "awspasswd"
+  public_key = "${file(var.public_key_location)}"
+}
+
+resource "aws_instance" "aws-ec2-instance" {
+  ami = data.aws_ami.getting-ami-id.id
+  
+  instance_type = "t2.micro"
+  subnet_id = aws_subnet.subnet-variable-0.id
+  availability_zone = var.cidr_block_range_subnets[0].region
+  associate_public_ip_address = true
+  count = 1
+  vpc_security_group_ids = [aws_security_group.variable-sg.id]
+  key_name = aws_key_pair.public-key.key_name
+  tags ={
+    "Name" = "terraform-instance"
+  }
 }
