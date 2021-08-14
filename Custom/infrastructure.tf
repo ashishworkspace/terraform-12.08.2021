@@ -163,4 +163,13 @@ resource "aws_instance" "aws-ec2-instance" {
   tags ={
     "Name" = "terraform-instance"
   }
+
+  # user_data will run only one time i.e. during launching of an instance
+  user_data = <<EOF
+      #!/bin/bash
+      sudo yum update -y && sudo yum install docker -y
+      sudo systemctl start docker 
+      sudo usermod -aG docker ec2-user
+      docker run -p 8080:80 httpd
+  EOF
 }
