@@ -3,3 +3,7 @@
 
 # ignore backup and state files
 *.tfstate*
+
+# ignoreing the SSH PRIVATE and PUBLIC files
+aws_ssh
+aws_ssh.pub

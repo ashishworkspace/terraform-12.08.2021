@@ -6,3 +6,4 @@ cidr_block_range_subnets = [
 
 ipv4-local-ingress = "49.37.77.178/32"
 public_key_location = "./aws_ssh.pub"
+exec-script-location = "./exec-bash.sh"

@@ -1,7 +1,0 @@
-# ignoreing the .terraform profiler part
-.terraform
-
-
-# ignoreing the state files
-*.tfstate*
-*.tfstate
