@@ -31,6 +31,10 @@ resource "aws_vpc" "vpc-variable"{
 }
 
 variable "public_key_location" {}
+
+variable "exec-script-location" {
+  ddescription = "Passing the exec bash file to run command inside the ec2 instance"  
+}
 resource "aws_subnet" "subnet-variable-0" {
     vpc_id = aws_vpc.vpc-variable.id
     cidr_block = var.cidr_block_range_subnets[0].cidr_block
@@ -165,11 +169,5 @@ resource "aws_instance" "aws-ec2-instance" {
   }
 
   # user_data will run only one time i.e. during launching of an instance
-  user_data = <<EOF
-      #!/bin/bash
-      sudo yum update -y && sudo yum install docker -y
-      sudo systemctl start docker 
-      sudo usermod -aG docker ec2-user
-      docker run -p 8080:80 httpd
-  EOF
+  user_data = 
 }
