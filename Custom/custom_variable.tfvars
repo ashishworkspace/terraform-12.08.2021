@@ -4,6 +4,8 @@ cidr_block_range_subnets = [
     {cidr_block = "192.168.3.0/24", name = "terraform-subnet-1C", region="ap-south-1c"}
 ]
 
-ipv4-local-ingress = "49.37.77.178/32"
+ipv4-local-ingress = "49.37.77.158/32"
 public_key_location = "./aws_ssh.pub"
 exec-script-location = "./exec-bash.sh"
+location-of-script-to-exec = "local.sh"
+private_key_location = "aws_ssh"

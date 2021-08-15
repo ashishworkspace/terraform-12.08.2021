@@ -33,7 +33,16 @@ resource "aws_vpc" "vpc-variable"{
 variable "public_key_location" {}
 
 variable "exec-script-location" {
-  ddescription = "Passing the exec bash file to run command inside the ec2 instance"  
+  description = "Passing the exec bash file to run command inside the ec2 instance"  
+}
+
+variable "location-of-script-to-exec" {
+  description = "Copy the script from local machine to aws."
+}
+
+variable "private_key_location" {
+  description = "To login inside the EC2 instance we need private key"
+  # in this case terraform will login inorder to run scripts
 }
 resource "aws_subnet" "subnet-variable-0" {
     vpc_id = aws_vpc.vpc-variable.id
@@ -167,7 +176,38 @@ resource "aws_instance" "aws-ec2-instance" {
   tags ={
     "Name" = "terraform-instance"
   }
-
+  
   # user_data will run only one time i.e. during launching of an instance
-  user_data = 
+  # user_data = "${file(var.exec-script-location)}"
+  
+
+
+  # to provisioner a script we first need to connect to the remote machine
+
+
+
+  # not recommended
+  # provisioner is used to exec command remotely as well as locally. 
+  # to exec any code in remote 
+  # we need push the script first to the cloud than we can execute that script
+  # provider has one more feature called file
+  # i.e. used to push the script file from local to remote instance
+  # connection {
+  #     host = self.public_ip
+  #     user = "ec2-user"
+  #     type = "ssh"
+  #     private_key = file(var.private_key_location)
+  # }
+  # provisioner "file" {
+  #   source = "local.sh"
+  #   destination = "/home/ec2-user/local.sh"
+  # }
+
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo yum update -y"
+  #   ]
+    
+  #   # script = file("local.sh")   # this will run the script on AWS
+  # }
 }
